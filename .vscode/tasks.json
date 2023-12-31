@@ -9,7 +9,7 @@
 				"-fdiagnostics-color=always",
 				"-g",
 				"-std=c++11",
-				"${fileDirname}/*.hpp",
+				"${fileDirname}/*.cpp",
 				"-o",
 				"${fileDirname}/main"
 			],

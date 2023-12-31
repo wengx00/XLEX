@@ -9,7 +9,7 @@
 下载Mingw64/Clang++等编译器，在vscode中配置生成任务或直接手动shell运行：
 
 ```shell
-g++ -g -std=c++11 *.hpp -o main
+g++ -g -std=c++11 *.cpp -o main
 ```
 
 即可输出二进制文件。具体的Debug方法可以看Google，不推荐手动shell，可以在vscode配置生成任务或使用下面1.4的Debug方案。
