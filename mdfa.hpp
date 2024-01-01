@@ -11,6 +11,7 @@
 #include <set>
 #include <algorithm>
 #include <stack>
+#include <sstream>
 
 struct MDfaNode {
     int state;
@@ -173,5 +174,49 @@ public:
 
     vector<MDfaNode*> getNodes() {
         return nodes;
+    }
+
+    string lex() { // 生成C++分析程序
+        stringstream ss;
+        ss << "#include <iostream>" << '\n';
+        ss << "#include <string>" << '\n';
+        ss << "#include <cstring>" << '\n' << '\n';
+        ss << "using namespace std;" << '\n' << '\n';
+        ss << "int main() {" << '\n';
+        ss << "     string input;" << '\n';
+        ss << "     cin >> input;" << '\n';
+        ss << "     int currentState = 0;" << '\n';
+        ss << "     for (int i = 0; i < input.size(); ++i) {" << '\n';
+        ss << "         char id = input[i];" << '\n';
+        ss << "         switch(currentState) {" << '\n';
+        for (MDfaNode* node : nodes) {
+            ss << "         case " << node->state << ":" << '\n';
+            ss << "             switch (id) {" << '\n';
+            for (auto& p : node->transfer) {
+                ss << "             case '" << p.first << "':" << '\n';
+                ss << "                 currentState = " << p.second << ";" << '\n';
+                ss << "                 break;";
+            }
+            ss << "             default:" << '\n';
+            ss << "                 cout << \"Error: Invalid input character.\" << '\\n';" << '\n';
+            ss << "                 return 1;" << '\n';
+            ss << "             }" << '\n';
+            ss << "         break;" << '\n';
+        }
+        ss << "         }" << '\n';
+        ss << "     }" << '\n';
+        ss << "     switch (currentState) {" << '\n';
+        for (MDfaNode* node : nodes) {
+            if (!node->isEnd) continue;
+            ss << "     case " << node->state << ":" << '\n';
+            ss << "         cout << \"Accepted.\" << '\\n';" << '\n';
+            ss << "         break;" << '\n';
+        }
+        ss << "     default:" << '\n';
+        ss << "         cout << \"Not Accepted.\" << '\\n';" << '\n';
+        ss << "     }" << '\n';
+        ss << "     return 0;" << '\n';
+        ss << "}" << '\n';
+        return ss.str();
     }
 };
