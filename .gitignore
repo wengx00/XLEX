@@ -1,7 +1,7 @@
 build
 private.lock
 main
-main.dSYM
+*.dSYM
 
 # Logs
 logs
