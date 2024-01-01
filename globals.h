@@ -2,9 +2,9 @@
 
 // EPSILON符号
 #define EPSILON '@'
-// 或
+// 连接
 #define CONCAT '\n'
-// 联结
+// 或
 #define UNION '|'
 // 闭包
 #define CLOSURE '*'
