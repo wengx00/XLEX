@@ -60,7 +60,10 @@ private:
             for (const char symbol : symbols) {
                 destination.clear();
                 set<DfaNode*> cur = prepared.front();
-                if (cur.empty()) continue; // 空集合
+                if (cur.empty()) {
+                    prepared.erase(prepared.begin(), prepared.begin() + 1); // 把cur出队
+                    continue; // 空集合
+                }
                 if (cur.size() == 1) {
                     completed.push_back(cur); // 长度为1，无需拆分
                     prepared.erase(prepared.begin(), prepared.begin() + 1);
