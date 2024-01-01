@@ -15,7 +15,7 @@ struct NfaNode {
     int state = 0;
     bool isEnd = false;
     map<char, vector<NfaNode*>> transfers;
-    
+
     NfaNode() : state(0) {}
     NfaNode(int state) : state(state) {}
     NfaNode(const NfaNode& node) : state(node.state), isEnd(node.isEnd), transfers(node.transfers) {}
@@ -58,7 +58,7 @@ private:
         graph.start->transfers[symbol].push_back(graph.end);
         return graph;
     }
-    NfaGraph setUnion(NfaGraph& t1, NfaGraph& t2) { // 连接Nfa子图
+    NfaGraph setConcat(NfaGraph& t1, NfaGraph& t2) { // 连接Nfa子图
         NfaGraph graph;
         graph.start = t1.start;
         graph.end = t2.end;
@@ -69,7 +69,7 @@ private:
         t1.end->transfers[EPSILON].push_back(t2.start);
         return graph;
     }
-    NfaGraph setConcat(NfaGraph& t1, NfaGraph& t2) { // Nfa子图 或运算
+    NfaGraph setUnion(NfaGraph& t1, NfaGraph& t2) { // Nfa子图 或运算
         NfaGraph graph(new NfaNode, new NfaNode);
         graph.end->isEnd = true;
         // 更新子图t1、t2的结点编号
@@ -128,18 +128,18 @@ private:
         string prepared = ""; // 预处理后的输入字符串
         stack<char> ops; // 符号栈
         stack<NfaGraph> subgraphs; // 子图栈
-        for (int i = 0; i < input.size(); ++i) { // 预处理输入字符串（加入UNION字符）
+        for (int i = 0; i < input.size(); ++i) { // 预处理输入字符串（加入CONCAT字符）
             char id = input[i];
             if (skip(id)) continue; // 跳过无意义字符
             prepared.push_back(id);
             if (i + 1 >= input.size() ||
                 input[i + 1] == RBRACKET ||
-                input[i] == CONCAT ||
-                input[i + 1] == CONCAT ||
+                input[i] == UNION ||
+                input[i + 1] == UNION ||
                 input[i] == LBRACKET ||
                 input[i + 1] == CLOSURE) continue; // 这些情况不用手动加入联结符号
             // 人为加入表示UNION的字符
-            prepared.push_back(UNION);
+            prepared.push_back(CONCAT);
         }
         for (int i = 0; i < prepared.size(); ++i) {
             char id = prepared[i]; // 当前Identifier

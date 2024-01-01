@@ -3,9 +3,9 @@
 // EPSILON符号
 #define EPSILON '@'
 // 或
-#define CONCAT '|'
+#define CONCAT '\n'
 // 联结
-#define UNION '\n'
+#define UNION '|'
 // 闭包
 #define CLOSURE '*'
 // 左括号
@@ -35,9 +35,9 @@ int privilege(char target) {
     {
     case CLOSURE:
         return 3;
-    case UNION:
-        return 2;
     case CONCAT:
+        return 2;
+    case UNION:
         return 1;
     default:
         return 0;

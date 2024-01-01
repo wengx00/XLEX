@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    Nfa nfa("ab|cd*");
+    Nfa nfa("ab|cd");
     Dfa dfa(nfa);
     MDfa mdfa(dfa);
     return 0;
