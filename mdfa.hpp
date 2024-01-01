@@ -58,6 +58,7 @@ private:
         prepared.push_back(right);
         while (prepared.size()) {
             for (const char symbol : symbols) {
+                if (prepared.empty()) break;
                 destination.clear();
                 set<DfaNode*> cur = prepared.front();
                 if (cur.empty()) {
