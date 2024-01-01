@@ -93,15 +93,14 @@ private:
         stack<NfaNode*> prepared; // DFS栈
         map<int, int> visited;
         prepared.push(source);
-        closure.insert(source);
         while (prepared.size()) {
             NfaNode* cur = prepared.top();
             prepared.pop();
+            closure.insert(cur);
             visited[cur->state] = 1;
             for (NfaNode* next : cur->transfers[EPSILON]) {
                 if (!visited[next->state]) {
                     prepared.push(next);
-                    closure.insert(next);
                 }
             }
         }
@@ -111,7 +110,7 @@ private:
     vector<DfaNode*> nodes;
     Nfa& nfa;
 public:
-    Dfa(Nfa& nfa): nfa(nfa) {
+    Dfa(Nfa& nfa) : nfa(nfa) {
         generate();
     }
     Nfa getNfa() {
