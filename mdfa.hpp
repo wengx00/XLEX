@@ -201,7 +201,7 @@ public:
             ss << "                 cout << \"Error: Invalid input character.\" << '\\n';" << '\n';
             ss << "                 return 1;" << '\n';
             ss << "             }" << '\n';
-            ss << "         break;" << '\n';
+            ss << "             break;" << '\n';
         }
         ss << "         }" << '\n';
         ss << "     }" << '\n';

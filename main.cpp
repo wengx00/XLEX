@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    Nfa nfa("b*a(bb)*a(a|(bb)*)*b*");
+    Nfa nfa("ab|de*");
     Dfa dfa(nfa);
     MDfa mdfa(dfa);
     string lexCode = mdfa.lex();
