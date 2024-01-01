@@ -15,10 +15,7 @@ struct NfaNode {
     int state = 0;
     bool isEnd = false;
     map<char, vector<NfaNode*>> transfers;
-
-    bool operator== (const NfaNode& node) {
-        return state == node.state;
-    }
+    
     NfaNode() : state(0) {}
     NfaNode(int state) : state(state) {}
     NfaNode(const NfaNode& node) : state(node.state), isEnd(node.isEnd), transfers(node.transfers) {}
