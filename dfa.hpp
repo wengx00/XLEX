@@ -52,27 +52,27 @@ private:
         for (int i = 0; i < nodes.size(); ++i) {
             DfaNode* cur = nodes[i];
             for (char symbol : symbols) {
+                set<NfaNode*> nfaNodesOfSymbol;
                 for (NfaNode* next : cur->nfaNodes) {
                     set<NfaNode*> nfaNodesOfNext = forward(next, symbol);
-                    if (nfaNodesOfNext.empty()) continue;
-                    // 判断是否新增
-                    bool shouldUpdate = true;
-                    DfaNode* instance = new DfaNode(nodes.size());
-                    instance->bindNfaNodes(nfaNodesOfNext);
-                    // 子集构造法
-                    for (DfaNode* exist : nodes) {
-                        if (*exist == *instance) {
-                            instance = exist;
-                            shouldUpdate = false;
-                            break;
-                        }
-                    }
-                    if (shouldUpdate) { // 需要新增节点
-                        nodes.push_back(instance);
-                    }
-                    // 加入转移关系
-                    cur->transfers[symbol] = instance->state;
+                    nfaNodesOfSymbol.insert(nfaNodesOfNext.begin(), nfaNodesOfNext.end());
                 }
+                if (nfaNodesOfSymbol.empty()) continue;
+                // 判断是否新增
+                DfaNode* instance = new DfaNode(nodes.size());
+                instance->bindNfaNodes(nfaNodesOfSymbol);
+                // 子集构造法
+                for (DfaNode* exist : nodes) {
+                    if (*exist == *instance) {
+                        instance = exist;
+                        break;
+                    }
+                }
+                if (instance->state == nodes.size()) { // 需要新增节点
+                    nodes.push_back(instance);
+                }
+                // 加入转移关系
+                cur->transfers[symbol] = instance->state;
             }
         }
     }
@@ -96,13 +96,11 @@ private:
         while (prepared.size()) {
             NfaNode* cur = prepared.top();
             prepared.pop();
+            if (visited[cur->state]) continue;
             closure.insert(cur);
             visited[cur->state] = 1;
-            for (NfaNode* next : cur->transfers[EPSILON]) {
-                if (!visited[next->state]) {
-                    prepared.push(next);
-                }
-            }
+            for (NfaNode* next : cur->transfers[EPSILON])
+                prepared.push(next);
         }
         return closure;
     }

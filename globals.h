@@ -3,7 +3,7 @@
 // EPSILON符号
 #define EPSILON '@'
 // 连接
-#define CONCAT '\n'
+#define CONCAT '.'
 // 或
 #define UNION '|'
 // 闭包
