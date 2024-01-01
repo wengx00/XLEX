@@ -54,10 +54,12 @@ private:
             if (node->isEnd) right.insert(node);
             else left.insert(node);
         }
-        prepared.push_back(left);
-        prepared.push_back(right);
-        while (prepared.size()) {
-            for (const char symbol : symbols) {
+        completed.push_back(left);
+        completed.push_back(right);
+        for (const char symbol : symbols) {
+            prepared = completed;
+            completed.clear();
+            while (prepared.size()) {
                 if (prepared.empty()) break;
                 destination.clear();
                 set<DfaNode*> cur = prepared.front();
@@ -77,26 +79,33 @@ private:
                     }
                     int target = node->transfers[symbol]; // 下一个DFA状态
                     for (int i = 0; i < prepared.size(); ++i) {
+                        bool matched = false;
                         for (DfaNode* state : prepared[i]) {
                             if (state->state == target) { // 移进的目标是这个集合
+                                matched = true;
                                 destination[i].insert(node);
+                                break;
                             }
                         }
+                        if (matched) break;
                     }
                     for (int i = 0; i < completed.size(); ++i) {
+                        bool matched = false;
                         for (DfaNode* state : completed[i]) {
                             if (state->state == target) { // 移进的目标是这个集合
+                                matched = true;
                                 destination[prepared.size() + i].insert(node);
+                                break;
                             }
                         }
+                        if (matched) break;
                     }
                 }
                 prepared.erase(prepared.begin(), prepared.begin() + 1); // 把cur出队
                 // 找内奸
                 if (destination.size() > 1) { // 有内奸
-                    for (auto& p : destination) {
+                    for (auto& p : destination)
                         prepared.push_back(p.second);
-                    }
                     continue;
                 }
                 // 没有内奸
