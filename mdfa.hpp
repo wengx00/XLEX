@@ -195,7 +195,7 @@ public:
             for (auto& p : node->transfer) {
                 ss << "             case '" << p.first << "':" << '\n';
                 ss << "                 currentState = " << p.second << ";" << '\n';
-                ss << "                 break;";
+                ss << "                 break;" << '\n';
             }
             ss << "             default:" << '\n';
             ss << "                 cout << \"Error: Invalid input character.\" << '\\n';" << '\n';
